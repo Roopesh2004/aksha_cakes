@@ -5,6 +5,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, ArrowDown } from "lucide-react";
+import Image from "next/image";
 
 const TOTAL_FRAMES = 201;
 
@@ -73,7 +74,7 @@ export default function HeroSection() {
       const promises = Array.from({ length: loadedFrameCount }, (_, i) => {
         const frameIndex = Math.min(i * frameStep + 1, TOTAL_FRAMES);
         return new Promise<HTMLImageElement>((resolve) => {
-          const img = new Image();
+          const img = new window.Image();
           img.src = getFrameUrl(frameIndex);
           img.onload = () => {
             loadedCount++;
@@ -459,7 +460,7 @@ export default function HeroSection() {
                       backgroundColor: "rgba(230, 197, 148, 0.15)" 
                     }}
                     whileTap={{ scale: 0.95 }}
-                    href="https://wa.me/919999999999?text=Hi%20Aksha%20Cakes%2C%20I%20would%20like%20to%20build%20a%20custom%20premium%20cake%21"
+                    href="https://wa.me/917337335674?text=Hi%20Aksha%20Cakes%2C%20I%20would%20like%20to%20build%20a%20custom%20premium%20cake%21"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-full sm:w-auto rounded-full border border-white/20 bg-black/25 backdrop-blur-sm text-white font-extrabold text-xs sm:text-sm md:text-base px-6 sm:px-8 py-3 sm:py-4 tracking-widest transition-all uppercase cursor-pointer text-center shadow-lg hover:shadow-amber-950/10"
@@ -498,14 +499,29 @@ export default function HeroSection() {
             className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#0E0B0A] px-6"
           >
             {/* Elegant Luxury loading backdrop logo */}
-            <div className="relative mb-12 flex flex-col items-center space-y-3">
+            <div className="relative mb-8 flex flex-col items-center space-y-4">
               <motion.div
                 animate={{ scale: [1, 1.05, 1], opacity: [0.8, 1, 0.8] }}
                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                 className="absolute inset-0 bg-[#E6C594]/5 rounded-full blur-3xl w-48 h-48 -translate-x-1/4 -translate-y-1/4"
               />
-              <span className="font-serif text-3xl md:text-4xl font-extrabold tracking-widest text-[#E6C594]">AKSHA CAKES</span>
-              <span className="text-[10px] md:text-xs font-semibold tracking-[0.3em] text-[#F5E6D3] uppercase">Haute Patisserie</span>
+              <motion.div
+                animate={{ scale: [0.95, 1.02, 0.95] }}
+                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+                className="relative w-24 h-24 overflow-hidden rounded-full border border-primary/20 bg-white flex items-center justify-center shadow-lg"
+              >
+                <Image
+                  src="/logo.png"
+                  alt="Aksha Cakes Logo"
+                  width={96}
+                  height={96}
+                  className="object-cover"
+                />
+              </motion.div>
+              <div className="text-center">
+                <span className="font-serif text-2xl md:text-3xl font-extrabold tracking-widest text-[#E6C594] block">AKSHA CAKES</span>
+                <span className="text-[10px] md:text-xs font-semibold tracking-[0.3em] text-[#F5E6D3] uppercase mt-1 block">Haute Patisserie</span>
+              </div>
             </div>
 
             {/* Custom styled progress indicators */}

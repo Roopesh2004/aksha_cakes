@@ -42,7 +42,7 @@ export default function CakeDetailClient({ cake, relatedCakes }: CakeDetailClien
   const currentPrice = getDynamicPrice();
 
   const handleOrderWhatsApp = () => {
-    const num = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "919999999999";
+    const num = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "917337335674";
     
     let messageText = `*New Cake Inquiry from Website*\n\n`;
     messageText += `*Cake:* ${cake.name}\n`;

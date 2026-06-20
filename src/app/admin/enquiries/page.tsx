@@ -21,7 +21,7 @@ export default function AdminEnquiriesPage() {
         {
           id: "enq-1",
           customer_name: "Sneha Sharma",
-          phone: "919999999999",
+          phone: "917337335674",
           message: "Need a 2 kg eggless truffle cake with anniversary design and 'Happy 25th Anniversary' message.",
           event_date: "2026-06-25",
           status: "Pending",
@@ -67,7 +67,7 @@ export default function AdminEnquiriesPage() {
           {
             id: "enq-1",
             customer_name: "Sneha Sharma",
-            phone: "919999999999",
+            phone: "917337335674",
             message: "Need a 2 kg eggless truffle cake with anniversary design and 'Happy 25th Anniversary' message.",
             event_date: "2026-06-25",
             status: "Pending",
@@ -93,7 +93,7 @@ export default function AdminEnquiriesPage() {
         {
           id: "enq-1",
           customer_name: "Sneha Sharma",
-          phone: "919999999999",
+          phone: "917337335674",
           message: "Need a 2 kg eggless truffle cake with anniversary design and 'Happy 25th Anniversary' message.",
           event_date: "2026-06-25",
           status: "Pending",

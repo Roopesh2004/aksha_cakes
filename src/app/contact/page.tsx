@@ -134,7 +134,7 @@ export default function ContactPage() {
               </li>
               <li className="flex items-center space-x-3">
                 <Phone className="h-5 w-5 text-primary shrink-0" />
-                <span>+91 99999 99999 (Inquiries & WhatsApp)</span>
+                <span>+91 73373 35674 (Inquiries & WhatsApp)</span>
               </li>
               <li className="flex items-center space-x-3">
                 <Mail className="h-5 w-5 text-primary shrink-0" />

@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Cake } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import Image from "next/image";
 
 const navItems = [
   { name: "Home", path: "/" },
@@ -34,9 +35,15 @@ export default function Header() {
               <motion.div
                 whileHover={{ rotate: 15, scale: 1.1 }}
                 transition={{ type: "spring", stiffness: 400, damping: 15 }}
-                className="text-primary"
+                className="relative h-10 w-10 overflow-hidden rounded-full border border-primary/20 bg-white flex items-center justify-center shadow-sm"
               >
-                <Cake className="h-8 w-8" />
+                <Image
+                  src="/logo.png"
+                  alt="Aksha Cakes Logo"
+                  width={40}
+                  height={40}
+                  className="object-cover"
+                />
               </motion.div>
               <span className="font-serif text-2xl font-bold tracking-wide text-primary-dark dark:text-primary-soft">
                 Aksha <span className="text-primary group-hover:text-primary-dark dark:group-hover:text-primary-soft transition-colors duration-300">Cakes</span>

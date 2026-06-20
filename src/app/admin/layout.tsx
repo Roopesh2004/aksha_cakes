@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { 
   Cake, LayoutDashboard, FolderKanban, Image as ImageIcon, 
   MessageSquare, MailOpen, LogOut, ChevronRight, Menu, X, ArrowLeft
@@ -115,8 +116,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       
       {/* 1. Mobile Sidebar Toggle Bar */}
       <div className="lg:hidden fixed top-0 left-0 right-0 h-14 bg-white dark:bg-card-dark border-b border-primary/10 flex items-center justify-between px-4 z-30">
-        <Link href="/" className="flex items-center space-x-1.5 text-primary-dark dark:text-primary-soft">
-          <Cake className="h-6 w-6 text-primary" />
+        <Link href="/" className="flex items-center space-x-1.5 text-primary-dark dark:text-primary-soft group">
+          <div className="relative h-6 w-6 overflow-hidden rounded-full border border-primary/20 bg-white flex items-center justify-center shadow-sm">
+            <Image
+              src="/logo.png"
+              alt="Aksha Cakes Logo"
+              width={24}
+              height={24}
+              className="object-cover"
+            />
+          </div>
           <span className="font-serif text-lg font-bold tracking-wide">Aksha Admin</span>
         </Link>
         <button
@@ -137,8 +146,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div className="space-y-8 mt-10 lg:mt-0">
           {/* Logo Header */}
           <div className="flex items-center justify-between">
-            <Link href="/" className="flex items-center space-x-2 text-primary-dark dark:text-primary-soft">
-              <Cake className="h-8 w-8 text-primary" />
+            <Link href="/" className="flex items-center space-x-2 text-primary-dark dark:text-primary-soft group">
+              <div className="relative h-9 w-9 overflow-hidden rounded-full border border-primary/20 bg-white flex items-center justify-center shadow-sm">
+                <Image
+                  src="/logo.png"
+                  alt="Aksha Cakes Logo"
+                  width={36}
+                  height={36}
+                  className="object-cover"
+                />
+              </div>
               <span className="font-serif text-xl font-bold tracking-wide">
                 Aksha <span className="text-primary text-sm font-sans block uppercase font-bold tracking-widest">Admin Panel</span>
               </span>

@@ -110,7 +110,7 @@ export default function HomePage() {
   };
 
   const getWhatsAppLink = (cakeName?: string) => {
-    const num = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "919999999999";
+    const num = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "917337335674";
     const msg = cakeName 
       ? `Hi Aksha Cakes, I would like to inquire about ordering the ${cakeName} cake.`
       : "Hi Aksha Cakes, I would like to inquire about your custom cakes!";
@@ -619,14 +619,14 @@ export default function HomePage() {
             "image": "https://akshacakes.vercel.app/hero-cake.png",
             "@id": "https://akshacakes.vercel.app/#bakery",
             "url": "https://akshacakes.vercel.app",
-            "telephone": "+919999999999",
-            "priceRange": "$$",
+            "telephone": "+917337335674",
+            "priceRange": "₹₹",
             "address": {
               "@type": "PostalAddress",
-              "streetAddress": "Premium Home Bakery Area",
-              "addressLocality": "Mumbai",
-              "addressRegion": "MH",
-              "postalCode": "400001",
+              "streetAddress": "11/224-A, Eluru Rd, opposite to Bommarillu Theatre, Loyaada",
+              "addressLocality": "Gudivada",
+              "addressRegion": "AP",
+              "postalCode": "521301",
               "addressCountry": "IN"
             },
             "openingHoursSpecification": {

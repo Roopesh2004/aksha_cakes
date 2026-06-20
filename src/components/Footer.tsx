@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Cake, Phone, Mail, MapPin, Clock } from "lucide-react";
+import { Phone, Mail, MapPin, Clock } from "lucide-react";
+import Image from "next/image";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -10,10 +11,18 @@ export default function Footer() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           {/* Brand Column */}
           <div className="flex flex-col space-y-4">
-            <Link href="/" className="flex items-center space-x-2 text-primary-dark dark:text-primary-soft">
-              <Cake className="h-6 w-6 text-primary" />
+            <Link href="/" className="flex items-center space-x-2 text-primary-dark dark:text-primary-soft group">
+              <div className="relative h-8 w-8 overflow-hidden rounded-full border border-primary/20 bg-white flex items-center justify-center shadow-sm">
+                <Image
+                  src="/logo.png"
+                  alt="Aksha Cakes Logo"
+                  width={32}
+                  height={32}
+                  className="object-cover"
+                />
+              </div>
               <span className="font-serif text-xl font-bold tracking-wide">
-                Aksha <span className="text-primary">Cakes</span>
+                Aksha <span className="text-primary group-hover:text-primary-dark dark:group-hover:text-primary-soft transition-colors duration-300">Cakes</span>
               </span>
             </Link>
             <p className="text-sm text-primary-dark/70 dark:text-primary-light/70 leading-relaxed">
@@ -74,7 +83,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center space-x-2">
                 <Phone className="h-4 w-4 text-primary shrink-0" />
-                <span>+91 99999 99999</span>
+                <span>+91 73373 35674</span>
               </li>
               <li className="flex items-center space-x-2">
                 <Mail className="h-4 w-4 text-primary shrink-0" />

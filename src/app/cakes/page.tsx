@@ -116,7 +116,7 @@ function CakesContent() {
   };
 
   const getWhatsAppLink = (cakeName: string) => {
-    const num = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "919999999999";
+    const num = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "917337335674";
     const msg = `Hi Aksha Cakes, I would like to order the ${cakeName} cake.`;
     return `https://wa.me/${num}?text=${encodeURIComponent(msg)}`;
   };
