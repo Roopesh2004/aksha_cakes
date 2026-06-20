@@ -148,9 +148,9 @@ export default function HeroSection() {
     const pArr: Particle[] = [];
     const count = 40;
     const colors = [
-      "rgba(255, 122, 162, 0.4)", // Brand pink glow
-      "rgba(255, 214, 224, 0.3)", // Soft pink dust
-      "rgba(212, 175, 55, 0.4)",   // Champagne gold spark
+      "rgba(230, 197, 148, 0.4)", // Champagne gold spark
+      "rgba(245, 230, 211, 0.3)", // Soft cream dust
+      "rgba(212, 175, 55, 0.4)",   // Metallic gold spark
       "rgba(247, 231, 206, 0.5)"   // Warm gold dust
     ];
 
