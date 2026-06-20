@@ -118,7 +118,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="space-y-24 pb-24 bg-bg-light dark:bg-bg-dark transition-colors duration-300">
+    <div className="space-y-24 pb-24 bg-bg-light dark:bg-bg-dark transition-colors duration-300 overflow-x-hidden w-full">
       
       {/* 1. HERO SECTION */}
       <HeroSection />
