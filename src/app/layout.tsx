@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import SmoothScroll from "@/components/SmoothScroll";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -65,10 +66,12 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col bg-bg-light dark:bg-bg-dark text-primary-dark dark:text-primary-light transition-colors duration-300">
-        <Header />
-        <main className="flex-grow">{children}</main>
-        <Footer />
-        <WhatsAppButton />
+        <SmoothScroll>
+          <Header />
+          <main className="flex-grow">{children}</main>
+          <Footer />
+          <WhatsAppButton />
+        </SmoothScroll>
       </body>
     </html>
   );

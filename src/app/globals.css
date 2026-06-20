@@ -214,3 +214,43 @@ body {
   }
 }
 
+/* Ambient decorative backglow spheres */
+.ambient-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(140px);
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.25;
+  mix-blend-mode: plus-lighter;
+}
+
+.ambient-glow-rose {
+  background: radial-gradient(circle, var(--color-primary) 0%, rgba(255, 122, 162, 0) 70%);
+}
+
+.ambient-glow-dark-rose {
+  background: radial-gradient(circle, var(--color-primary-dark) 0%, rgba(107, 63, 74, 0) 70%);
+}
+
+/* Lenis smooth scrolling compatibility */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+

@@ -124,8 +124,11 @@ export default function HomePage() {
       <HeroSection />
 
       {/* 2. CAKE CATEGORIES */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="text-center space-y-3 mb-12">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative overflow-visible">
+        {/* Ambient backglow */}
+        <div className="ambient-glow ambient-glow-rose absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 opacity-20 pointer-events-none" />
+        
+        <div className="text-center space-y-3 mb-12 relative z-10">
           <motion.h2 
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -176,8 +179,11 @@ export default function HomePage() {
       </section>
 
       {/* 3. FEATURED CAKES */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row items-center justify-between mb-12">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative overflow-visible">
+        {/* Ambient backglow */}
+        <div className="ambient-glow ambient-glow-dark-rose absolute top-12 left-10 w-[500px] h-[500px] opacity-15 pointer-events-none" />
+        
+        <div className="flex flex-col md:flex-row items-center justify-between mb-12 relative z-10">
           <div className="text-center md:text-left space-y-2">
             <h2 className="font-serif text-3xl md:text-4xl font-extrabold text-primary-dark dark:text-primary-soft">
               Our Bestselling Masterpieces
