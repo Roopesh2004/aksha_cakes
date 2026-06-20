@@ -118,13 +118,13 @@ export default function HomePage() {
   };
 
   return (
-    <div className="space-y-24 pb-24 bg-bg-light dark:bg-bg-dark transition-colors duration-300 overflow-x-hidden w-full">
+    <div className="space-y-24 pb-24 bg-bg-light dark:bg-bg-dark transition-colors duration-300">
       
       {/* 1. HERO SECTION */}
       <HeroSection />
 
       {/* 2. CAKE CATEGORIES */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative overflow-visible">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative overflow-hidden">
         {/* Ambient backglow */}
         <div className="ambient-glow ambient-glow-rose absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 opacity-20 pointer-events-none" />
         
@@ -179,7 +179,7 @@ export default function HomePage() {
       </section>
 
       {/* 3. FEATURED CAKES */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative overflow-visible">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative overflow-hidden">
         {/* Ambient backglow */}
         <div className="ambient-glow ambient-glow-dark-rose absolute top-12 left-10 w-[500px] h-[500px] opacity-15 pointer-events-none" />
         
