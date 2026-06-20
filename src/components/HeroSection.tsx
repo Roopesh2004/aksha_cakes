@@ -35,6 +35,7 @@ export default function HeroSection() {
   const [images, setImages] = useState<HTMLImageElement[]>([]);
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
 
   // Refs for tracking animation state inside continuous loop
   const currentFrameIndex = useRef(0);
@@ -48,12 +49,40 @@ export default function HeroSection() {
     return `/cake_video/ezgif-frame-${formattedNum}.jpg`;
   };
 
-  // 1. Preload all frame images
+  // Detect mobile width to selectively initialize animations and load frames
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // 1. Preload frame images
   useEffect(() => {
     let loadedCount = 0;
     const loadedImages: HTMLImageElement[] = [];
 
     const loadSequence = async () => {
+      // Optimization: If mobile, only load 1 single frame to optimize speed and data usage
+      if (isMobile) {
+        const img = new Image();
+        img.src = getFrameUrl(80); // Frame 80 is where the cake is beautifully displayed
+        img.onload = () => {
+          setProgress(100);
+          setImages([img]);
+          setLoading(false);
+        };
+        img.onerror = () => {
+          setProgress(100);
+          setImages([img]);
+          setLoading(false);
+        };
+        return;
+      }
+
+      // Desktop: Load all 201 frames for scroll scrubbing
       const promises = Array.from({ length: TOTAL_FRAMES }, (_, i) => {
         return new Promise<HTMLImageElement>((resolve) => {
           const img = new Image();
@@ -82,7 +111,7 @@ export default function HeroSection() {
     };
 
     loadSequence();
-  }, []);
+  }, [isMobile]);
 
   // Get dynamic loader messages
   const getLoaderMessage = (p: number) => {
@@ -98,7 +127,7 @@ export default function HeroSection() {
     if (!ctx) return;
 
     // Clamp index to prevent loading out-of-bounds frame on overscroll or reverse scroll
-    const clampedIndex = Math.max(0, Math.min(Math.floor(index), images.length - 1));
+    const clampedIndex = isMobile ? 0 : Math.max(0, Math.min(Math.floor(index), images.length - 1));
     const img = images[clampedIndex];
     if (!img) return;
 
@@ -146,7 +175,7 @@ export default function HeroSection() {
   // 2. Initialize gold sparkle particles
   const initParticles = (width: number, height: number) => {
     const pArr: Particle[] = [];
-    const count = 40;
+    const count = isMobile ? 15 : 40; // Fewer particles on mobile for speed
     const colors = [
       "rgba(230, 197, 148, 0.4)", // Champagne gold spark
       "rgba(245, 230, 211, 0.3)", // Soft cream dust
@@ -168,8 +197,10 @@ export default function HeroSection() {
     particles.current = pArr;
   };
 
-  // 3. Track mouse movement for parallax depth
+  // 3. Track mouse movement for parallax depth (Skip on mobile)
   useEffect(() => {
+    if (isMobile) return;
+
     const handleMouseMove = (e: MouseEvent) => {
       const { innerWidth, innerHeight } = window;
       const x = (e.clientX / innerWidth) - 0.5;
@@ -179,13 +210,11 @@ export default function HeroSection() {
 
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
+  }, [isMobile]);
 
   // 4. GSAP ScrollTrigger Integration
   useEffect(() => {
     if (loading || images.length === 0) return;
-
-    gsap.registerPlugin(ScrollTrigger);
 
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -203,6 +232,17 @@ export default function HeroSection() {
       renderFrame(currentFrameIndex.current);
     };
 
+    // Optimization: Skip ScrollTrigger pinning and calculations on mobile to prevent lag
+    if (isMobile) {
+      updateCanvasSize();
+      window.addEventListener("resize", updateCanvasSize);
+      initParticles(canvas.width, canvas.height);
+      return () => {
+        window.removeEventListener("resize", updateCanvasSize);
+      };
+    }
+
+    gsap.registerPlugin(ScrollTrigger);
     updateCanvasSize();
     window.addEventListener("resize", updateCanvasSize);
 
@@ -249,7 +289,7 @@ export default function HeroSection() {
       trigger.kill();
       ScrollTrigger.getAll().forEach((t) => t.kill());
     };
-  }, [loading, images]);
+  }, [loading, images, isMobile]);
 
   // 5. Continuous 60fps Animation Loop (Parallax + Particles + Rendering)
   useEffect(() => {
@@ -264,8 +304,10 @@ export default function HeroSection() {
 
     const tick = () => {
       // Linear interpolation (lerp) for smooth mouse movement
-      mouseOffset.current.x += (targetMouseOffset.current.x - mouseOffset.current.x) * 0.08;
-      mouseOffset.current.y += (targetMouseOffset.current.y - mouseOffset.current.y) * 0.08;
+      if (!isMobile) {
+        mouseOffset.current.x += (targetMouseOffset.current.x - mouseOffset.current.x) * 0.08;
+        mouseOffset.current.y += (targetMouseOffset.current.y - mouseOffset.current.y) * 0.08;
+      }
 
       // Draw the cake frame
       renderFrame(currentFrameIndex.current);
@@ -312,7 +354,7 @@ export default function HeroSection() {
     return () => {
       cancelAnimationFrame(animId);
     };
-  }, [loading, images]);
+  }, [loading, images, isMobile]);
 
   // Framer Motion text animation configs
   const staggerContainer = {
@@ -340,20 +382,26 @@ export default function HeroSection() {
   };
 
   const handleExplore = () => {
-    // Scroll down past the pinned hero section (container height is 250vh)
+    if (isMobile) {
+      // Smooth scroll on mobile to next section (height is just 100vh)
+      const nextSection = containerRef.current?.nextElementSibling;
+      nextSection?.scrollIntoView({ behavior: "smooth" });
+      return;
+    }
+    // Scroll down past the pinned hero section (container height is 250vh on desktop)
     const target = containerRef.current?.getBoundingClientRect().bottom;
     if (target !== undefined) {
       window.scrollTo({
-        top: window.scrollY + target - 80, // offset header height if fixed
+        top: window.scrollY + target - 80, // offset header height
         behavior: "smooth"
       });
     }
   };
 
   return (
-    <div ref={containerRef} className="relative h-[250vh] w-full bg-[#12090B] select-none">
-      {/* Pinned Viewport Container (sticky top-16 matches the header height of 64px) */}
-      <div className="sticky top-16 h-[calc(100vh-4rem)] w-full overflow-hidden flex items-center justify-center">
+    <div ref={containerRef} className={`relative ${isMobile ? "h-[calc(100vh-4rem)]" : "h-[250vh]"} w-full bg-[#0E0B0A] select-none`}>
+      {/* Viewport Container (relative on mobile, sticky pinned on desktop) */}
+      <div className={`${isMobile ? "relative h-full" : "sticky top-16 h-[calc(100vh-4rem)]"} w-full overflow-hidden flex items-center justify-center`}>
         
         {/* Canvas for cinematic video scrub */}
         <canvas 
@@ -362,8 +410,8 @@ export default function HeroSection() {
         />
 
         {/* Luxury dark vignettes for cinematic depth */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#12090B]/60 via-transparent to-[#12090B]/90 pointer-events-none" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_20%,#12090B_100%)] opacity-85 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0E0B0A]/60 via-transparent to-[#0E0B0A]/90 pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_20%,#0E0B0A_100%)] opacity-85 pointer-events-none" />
 
         {/* Text Overlay Section */}
         <AnimatePresence>
@@ -378,9 +426,9 @@ export default function HeroSection() {
                 {/* Premium Small Pill Badge */}
                 <motion.div
                   variants={fadeInUp}
-                  className="inline-flex items-center space-x-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-lg px-4 py-1 text-[10px] sm:text-xs font-extrabold tracking-widest text-[#FF7AA2] uppercase"
+                  className="inline-flex items-center space-x-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-lg px-4 py-1 text-[10px] sm:text-xs font-extrabold tracking-widest text-[#E6C594] uppercase"
                 >
-                  <Sparkles className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-[#FF7AA2] animate-pulse" />
+                  <Sparkles className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-[#E6C594] animate-pulse" />
                   <span>Aksha Cakes Haute Bakery</span>
                 </motion.div>
 
@@ -390,7 +438,7 @@ export default function HeroSection() {
                   className="font-serif text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-light tracking-tight leading-none text-white drop-shadow-lg"
                 >
                   Crafted for Every <br />
-                  <span className="font-extrabold italic bg-gradient-to-r from-[#FFD6E0] via-white to-[#FF7AA2] bg-clip-text text-transparent">
+                  <span className="font-extrabold italic bg-gradient-to-r from-[#F5E6D3] via-white to-[#E6C594] bg-clip-text text-transparent">
                     Celebration
                   </span>
                 </motion.h1>
@@ -411,12 +459,12 @@ export default function HeroSection() {
                   <motion.button
                     whileHover={{ 
                       scale: 1.05, 
-                      backgroundColor: "#FFD6E0",
-                      boxShadow: "0 0 25px rgba(255, 122, 162, 0.4)" 
+                      backgroundColor: "#F5E6D3",
+                      boxShadow: "0 0 25px rgba(230, 197, 148, 0.4)" 
                     }}
                     whileTap={{ scale: 0.95 }}
                     onClick={handleExplore}
-                    className="w-full sm:w-auto rounded-full bg-white text-[#12090B] font-extrabold text-xs sm:text-sm md:text-base px-6 sm:px-8 py-3 sm:py-4 tracking-widest transition-all uppercase cursor-pointer shadow-xl"
+                    className="w-full sm:w-auto rounded-full bg-white text-[#0E0B0A] font-extrabold text-xs sm:text-sm md:text-base px-6 sm:px-8 py-3 sm:py-4 tracking-widest transition-all uppercase cursor-pointer shadow-xl"
                   >
                     Explore Collection
                   </motion.button>
@@ -424,14 +472,14 @@ export default function HeroSection() {
                   <motion.a
                     whileHover={{ 
                       scale: 1.05, 
-                      borderColor: "rgba(255, 122, 162, 0.8)", 
-                      backgroundColor: "rgba(255, 122, 162, 0.15)" 
+                      borderColor: "rgba(230, 197, 148, 0.8)", 
+                      backgroundColor: "rgba(230, 197, 148, 0.15)" 
                     }}
                     whileTap={{ scale: 0.95 }}
                     href="https://wa.me/919999999999?text=Hi%20Aksha%20Cakes%2C%20I%20would%20like%20to%20build%20a%20custom%20premium%20cake%21"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full sm:w-auto rounded-full border border-white/20 bg-black/25 backdrop-blur-sm text-white font-extrabold text-xs sm:text-sm md:text-base px-6 sm:px-8 py-3 sm:py-4 tracking-widest transition-all uppercase cursor-pointer text-center shadow-lg hover:shadow-pink-900/10"
+                    className="w-full sm:w-auto rounded-full border border-white/20 bg-black/25 backdrop-blur-sm text-white font-extrabold text-xs sm:text-sm md:text-base px-6 sm:px-8 py-3 sm:py-4 tracking-widest transition-all uppercase cursor-pointer text-center shadow-lg hover:shadow-amber-950/10"
                   >
                     Build Your Cake
                   </motion.a>
@@ -451,7 +499,7 @@ export default function HeroSection() {
               className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center space-y-2 text-white/50 cursor-pointer pointer-events-none"
             >
               <span className="text-[10px] uppercase font-bold tracking-widest">Scroll to Explore</span>
-              <ArrowDown className="w-4 h-4 text-[#FF7AA2]" />
+              <ArrowDown className="w-4 h-4 text-[#E6C594]" />
             </motion.div>
           )}
         </AnimatePresence>
@@ -464,30 +512,30 @@ export default function HeroSection() {
             initial={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.8, ease: "easeInOut" }}
-            className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#12090B] px-6"
+            className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#0E0B0A] px-6"
           >
             {/* Elegant Luxury loading backdrop logo */}
             <div className="relative mb-12 flex flex-col items-center space-y-3">
               <motion.div
                 animate={{ scale: [1, 1.05, 1], opacity: [0.8, 1, 0.8] }}
                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute inset-0 bg-[#FF7AA2]/5 rounded-full blur-3xl w-48 h-48 -translate-x-1/4 -translate-y-1/4"
+                className="absolute inset-0 bg-[#E6C594]/5 rounded-full blur-3xl w-48 h-48 -translate-x-1/4 -translate-y-1/4"
               />
-              <span className="font-serif text-3xl md:text-4xl font-extrabold tracking-widest text-[#FF7AA2]">AKSHA CAKES</span>
-              <span className="text-[10px] md:text-xs font-semibold tracking-[0.3em] text-[#FFD6E0] uppercase">Haute Patisserie</span>
+              <span className="font-serif text-3xl md:text-4xl font-extrabold tracking-widest text-[#E6C594]">AKSHA CAKES</span>
+              <span className="text-[10px] md:text-xs font-semibold tracking-[0.3em] text-[#F5E6D3] uppercase">Haute Patisserie</span>
             </div>
 
             {/* Custom styled progress indicators */}
             <div className="w-full max-w-xs space-y-4">
               <div className="flex justify-between items-center text-xs font-mono text-white/60">
                 <span className="font-medium animate-pulse">{getLoaderMessage(progress)}</span>
-                <span className="font-bold text-[#FF7AA2]">{String(progress).padStart(2, "0")}%</span>
+                <span className="font-bold text-[#E6C594]">{String(progress).padStart(2, "0")}%</span>
               </div>
 
               {/* Progress track */}
               <div className="h-[2px] w-full bg-white/10 rounded-full overflow-hidden">
                 <motion.div
-                  className="h-full bg-gradient-to-r from-[#FF7AA2] via-[#FFD6E0] to-white"
+                  className="h-full bg-gradient-to-r from-[#E6C594] via-[#F5E6D3] to-white"
                   initial={{ width: "0%" }}
                   animate={{ width: `${progress}%` }}
                   transition={{ ease: "easeOut", duration: 0.1 }}
