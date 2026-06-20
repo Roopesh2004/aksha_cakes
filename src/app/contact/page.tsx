@@ -130,7 +130,7 @@ export default function ContactPage() {
             <ul className="space-y-4 text-sm text-primary-dark/80 dark:text-primary-light/80">
               <li className="flex items-start space-x-3">
                 <MapPin className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                <span>Aksha Cakes, Home Kitchen, Premium Area, India</span>
+                <span>11/224-A, Eluru Rd, opposite to Bommarillu Theatre, Loyaada, Gudivada, Andhra Pradesh 521301</span>
               </li>
               <li className="flex items-center space-x-3">
                 <Phone className="h-5 w-5 text-primary shrink-0" />
@@ -153,7 +153,7 @@ export default function ContactPage() {
             <div className="relative h-60 w-full rounded-2xl overflow-hidden border border-primary/5 shadow-inner">
               <iframe
                 title="Aksha Cakes Location Map"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15282225.79979123!2d73.72789125!3d20.77037075!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30635ff06b92b791%3A0xd78c4fa1854213a6!2sIndia!5e0!3m2!1sen!2sin!4v1655000000000!5m2!1sen!2sin"
+                src="https://maps.google.com/maps?q=11/224-A,%20Eluru%20Rd,%20opposite%20to%20Bommarillu%20Theatre,%20Gudivada,%20Andhra%20Pradesh%20521301&t=&z=16&ie=UTF8&iwloc=&output=embed"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}

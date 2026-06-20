@@ -68,9 +68,9 @@ export default function Footer() {
               Contact Info
             </h3>
             <ul className="space-y-3 text-sm text-primary-dark/80 dark:text-primary-light/80">
-              <li className="flex items-center space-x-2">
-                <MapPin className="h-4 w-4 text-primary shrink-0" />
-                <span>Aksha Cakes, Premium Home Bakery, India</span>
+              <li className="flex items-start space-x-2">
+                <MapPin className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                <span>Eluru Rd, Gudivada, Andhra Pradesh 521301</span>
               </li>
               <li className="flex items-center space-x-2">
                 <Phone className="h-4 w-4 text-primary shrink-0" />
