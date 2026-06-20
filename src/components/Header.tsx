@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Sun, Moon, Cake } from "lucide-react";
+import { Menu, X, Cake } from "lucide-react";
 
 const navItems = [
   { name: "Home", path: "/" },
@@ -16,26 +16,13 @@ const navItems = [
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
-  const [theme, setTheme] = useState<"light" | "dark">("light");
   const pathname = usePathname();
 
-  // Load theme from document class (which is set by blocking script in head)
+  // Force dark mode on mount
   useEffect(() => {
-    const isDark = document.documentElement.classList.contains("dark");
-    setTheme(isDark ? "dark" : "light");
+    document.documentElement.classList.add("dark");
+    localStorage.setItem("theme", "dark");
   }, []);
-
-  const toggleTheme = () => {
-    const nextTheme = theme === "light" ? "dark" : "light";
-    setTheme(nextTheme);
-    if (nextTheme === "dark") {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
-  };
 
   return (
     <header className="sticky top-0 z-40 w-full glassmorphism transition-all duration-300 border-b border-primary/10 shadow-sm">
@@ -86,14 +73,6 @@ export default function Header() {
 
           {/* Action Buttons */}
           <div className="hidden md:flex items-center space-x-4">
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              onClick={toggleTheme}
-              className="rounded-full p-2 text-primary-dark/80 dark:text-primary-light/85 hover:bg-primary/10 transition-colors cursor-pointer"
-              aria-label="Toggle Theme"
-            >
-              {theme === "light" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
-            </motion.button>
             <motion.div
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.95 }}
@@ -107,15 +86,8 @@ export default function Header() {
             </motion.div>
           </div>
 
-          {/* Mobile menu and theme buttons */}
+          {/* Mobile menu button */}
           <div className="flex md:hidden items-center space-x-2">
-            <button
-              onClick={toggleTheme}
-              className="rounded-full p-2 text-primary-dark/80 dark:text-primary-light/85 hover:bg-primary/10"
-              aria-label="Toggle Theme"
-            >
-              {theme === "light" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
-            </button>
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="rounded-md p-2 text-primary-dark dark:text-primary-light hover:bg-primary/10"
