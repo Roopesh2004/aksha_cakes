@@ -49,7 +49,7 @@ export default function HeroSection() {
     return `/cake_video/ezgif-frame-${formattedNum}.jpg`;
   };
 
-  // Detect mobile width to selectively initialize animations and load frames
+  // Detect mobile width to handle responsive layout adjustments
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
@@ -65,37 +65,25 @@ export default function HeroSection() {
     const loadedImages: HTMLImageElement[] = [];
 
     const loadSequence = async () => {
-      // Optimization: If mobile, only load 1 single frame to optimize speed and data usage
-      if (isMobile) {
-        const img = new Image();
-        img.src = getFrameUrl(80); // Frame 80 is where the cake is beautifully displayed
-        img.onload = () => {
-          setProgress(100);
-          setImages([img]);
-          setLoading(false);
-        };
-        img.onerror = () => {
-          setProgress(100);
-          setImages([img]);
-          setLoading(false);
-        };
-        return;
-      }
+      // Optimization: Load every 4th frame on mobile (~51 frames) to save data/bandwidth
+      // while keeping the scroll scrubbing animation active. Load all 201 frames on desktop.
+      const frameStep = isMobile ? 4 : 1;
+      const loadedFrameCount = Math.ceil(TOTAL_FRAMES / frameStep);
 
-      // Desktop: Load all 201 frames for scroll scrubbing
-      const promises = Array.from({ length: TOTAL_FRAMES }, (_, i) => {
+      const promises = Array.from({ length: loadedFrameCount }, (_, i) => {
+        const frameIndex = Math.min(i * frameStep + 1, TOTAL_FRAMES);
         return new Promise<HTMLImageElement>((resolve) => {
           const img = new Image();
-          img.src = getFrameUrl(i + 1);
+          img.src = getFrameUrl(frameIndex);
           img.onload = () => {
             loadedCount++;
-            setProgress(Math.floor((loadedCount / TOTAL_FRAMES) * 100));
+            setProgress(Math.floor((loadedCount / loadedFrameCount) * 100));
             resolve(img);
           };
           img.onerror = () => {
             // Gracefully handle load error to not freeze loader
             loadedCount++;
-            setProgress(Math.floor((loadedCount / TOTAL_FRAMES) * 100));
+            setProgress(Math.floor((loadedCount / loadedFrameCount) * 100));
             resolve(img);
           };
           loadedImages[i] = img;
@@ -127,8 +115,18 @@ export default function HeroSection() {
     if (!ctx) return;
 
     // Clamp index to prevent loading out-of-bounds frame on overscroll or reverse scroll
-    const clampedIndex = isMobile ? 0 : Math.max(0, Math.min(Math.floor(index), images.length - 1));
-    const img = images[clampedIndex];
+    const clampedIndex = Math.max(0, Math.min(Math.floor(index), TOTAL_FRAMES - 1));
+    
+    // Select image (map clamped index to loaded images array index)
+    let img;
+    if (isMobile) {
+      const progressRatio = clampedIndex / (TOTAL_FRAMES - 1);
+      const imageIndex = Math.max(0, Math.min(Math.floor(progressRatio * (images.length - 1)), images.length - 1));
+      img = images[imageIndex];
+    } else {
+      img = images[clampedIndex];
+    }
+
     if (!img) return;
 
     // Clear canvas
@@ -216,6 +214,8 @@ export default function HeroSection() {
   useEffect(() => {
     if (loading || images.length === 0) return;
 
+    gsap.registerPlugin(ScrollTrigger);
+
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -232,17 +232,6 @@ export default function HeroSection() {
       renderFrame(currentFrameIndex.current);
     };
 
-    // Optimization: Skip ScrollTrigger pinning and calculations on mobile to prevent lag
-    if (isMobile) {
-      updateCanvasSize();
-      window.addEventListener("resize", updateCanvasSize);
-      initParticles(canvas.width, canvas.height);
-      return () => {
-        window.removeEventListener("resize", updateCanvasSize);
-      };
-    }
-
-    gsap.registerPlugin(ScrollTrigger);
     updateCanvasSize();
     window.addEventListener("resize", updateCanvasSize);
 
@@ -382,13 +371,7 @@ export default function HeroSection() {
   };
 
   const handleExplore = () => {
-    if (isMobile) {
-      // Smooth scroll on mobile to next section (height is just 100vh)
-      const nextSection = containerRef.current?.nextElementSibling;
-      nextSection?.scrollIntoView({ behavior: "smooth" });
-      return;
-    }
-    // Scroll down past the pinned hero section (container height is 250vh on desktop)
+    // Scroll down past the pinned hero section (container height is 200vh/250vh)
     const target = containerRef.current?.getBoundingClientRect().bottom;
     if (target !== undefined) {
       window.scrollTo({
@@ -399,9 +382,9 @@ export default function HeroSection() {
   };
 
   return (
-    <div ref={containerRef} className={`relative ${isMobile ? "h-[calc(100vh-4rem)]" : "h-[250vh]"} w-full bg-[#0E0B0A] select-none`}>
-      {/* Viewport Container (relative on mobile, sticky pinned on desktop) */}
-      <div className={`${isMobile ? "relative h-full" : "sticky top-16 h-[calc(100vh-4rem)]"} w-full overflow-hidden flex items-center justify-center`}>
+    <div ref={containerRef} className={`relative ${isMobile ? "h-[200vh]" : "h-[250vh]"} w-full bg-[#0E0B0A] select-none`}>
+      {/* Viewport Container (sticky top-16 on both desktop and mobile now) */}
+      <div className="sticky top-16 h-[calc(100vh-4rem)] w-full overflow-hidden flex items-center justify-center">
         
         {/* Canvas for cinematic video scrub */}
         <canvas 
