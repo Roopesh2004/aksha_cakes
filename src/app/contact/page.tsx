@@ -153,7 +153,7 @@ export default function ContactPage() {
             <div className="relative h-60 w-full rounded-2xl overflow-hidden border border-primary/5 shadow-inner">
               <iframe
                 title="Aksha Cakes Location Map"
-                src="https://maps.google.com/maps?q=11/224-A,%20Eluru%20Rd,%20opposite%20to%20Bommarillu%20Theatre,%20Gudivada,%20Andhra%20Pradesh%20521301&t=&z=16&ie=UTF8&iwloc=&output=embed"
+                src="https://maps.google.com/maps?q=Aksha%20Eggless%20Cakes,%20Gudivada&t=&z=16&ie=UTF8&iwloc=&output=embed"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
