@@ -127,3 +127,90 @@ body {
     background-position-x: -200%;
   }
 }
+
+/* Premium UI / UX Pro Max Additions */
+
+.text-gradient-rose {
+  background: linear-gradient(135deg, #FF7AA2 0%, #E83E8C 50%, #6B3F4A 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.premium-glass-card {
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 122, 162, 0.2);
+  box-shadow: 
+    0 4px 30px rgba(0, 0, 0, 0.03), 
+    inset 0 1px 1px rgba(255, 255, 255, 0.8),
+    0 1px 3px rgba(107, 63, 74, 0.05);
+}
+
+.dark .premium-glass-card {
+  background: rgba(31, 16, 20, 0.45);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 122, 162, 0.1);
+  box-shadow: 
+    0 4px 30px rgba(0, 0, 0, 0.2), 
+    inset 0 1px 1px rgba(255, 122, 162, 0.05);
+}
+
+/* Evolved soft UI shadows */
+.shadow-soft-ui {
+  box-shadow: 
+    0 10px 30px -10px rgba(107, 63, 74, 0.12),
+    0 1px 3px rgba(107, 63, 74, 0.04);
+}
+
+.dark .shadow-soft-ui {
+  box-shadow: 
+    0 10px 30px -10px rgba(0, 0, 0, 0.5),
+    0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Hover lift transition */
+.hover-lift {
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease, border-color 0.4s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 
+    0 20px 40px -15px rgba(107, 63, 74, 0.15),
+    0 1px 3px rgba(107, 63, 74, 0.05);
+}
+
+.dark .hover-lift:hover {
+  box-shadow: 
+    0 20px 40px -15px rgba(0, 0, 0, 0.6),
+    0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Custom interactive particles container */
+.sparkle-container {
+  position: relative;
+  overflow: visible;
+}
+
+.sparkle-particle {
+  position: absolute;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(255,122,162,0.8) 0%, rgba(255,214,224,0) 70%);
+  border-radius: 50%;
+  animation: particle-float 4s ease-in-out infinite;
+}
+
+@keyframes particle-float {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateY(-10px) scale(1.2);
+    opacity: 0.8;
+  }
+}
+

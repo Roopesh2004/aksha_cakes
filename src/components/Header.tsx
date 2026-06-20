@@ -38,15 +38,21 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full glassmorphism transition-all duration-300">
+    <header className="sticky top-0 z-40 w-full glassmorphism transition-all duration-300 border-b border-primary/10 shadow-sm">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
-          {/* Logo */}
+          {/* Logo with micro-animation */}
           <div className="flex items-center">
-            <Link href="/" className="flex items-center space-x-2 text-primary-dark dark:text-primary-soft">
-              <Cake className="h-8 w-8 text-primary animate-pulse" />
-              <span className="font-serif text-2xl font-bold tracking-wide">
-                Aksha <span className="text-primary">Cakes</span>
+            <Link href="/" className="flex items-center space-x-2 group">
+              <motion.div
+                whileHover={{ rotate: 15, scale: 1.1 }}
+                transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                className="text-primary"
+              >
+                <Cake className="h-8 w-8" />
+              </motion.div>
+              <span className="font-serif text-2xl font-bold tracking-wide text-primary-dark dark:text-primary-soft">
+                Aksha <span className="text-primary group-hover:text-primary-dark dark:group-hover:text-primary-soft transition-colors duration-300">Cakes</span>
               </span>
             </Link>
           </div>
@@ -59,9 +65,9 @@ export default function Header() {
                 <Link
                   key={item.path}
                   href={item.path}
-                  className={`relative text-sm font-medium transition-colors duration-200 hover:text-primary ${
+                  className={`relative py-1 text-sm font-semibold tracking-wide transition-colors duration-300 hover:text-primary ${
                     isActive
-                      ? "text-primary font-semibold"
+                      ? "text-primary"
                       : "text-primary-dark/80 dark:text-primary-light/80"
                   }`}
                 >
@@ -69,8 +75,8 @@ export default function Header() {
                   {isActive && (
                     <motion.span
                       layoutId="activeNav"
-                      className="absolute -bottom-1 left-0 h-0.5 w-full bg-primary"
-                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                      className="absolute bottom-0 left-0 h-0.5 w-full bg-primary rounded-full"
+                      transition={{ type: "spring", stiffness: 350, damping: 25 }}
                     />
                   )}
                 </Link>
@@ -80,19 +86,25 @@ export default function Header() {
 
           {/* Action Buttons */}
           <div className="hidden md:flex items-center space-x-4">
-            <button
+            <motion.button
+              whileTap={{ scale: 0.95 }}
               onClick={toggleTheme}
-              className="rounded-full p-2 text-primary-dark/80 dark:text-primary-light/85 hover:bg-primary/10 transition-colors"
+              className="rounded-full p-2 text-primary-dark/80 dark:text-primary-light/85 hover:bg-primary/10 transition-colors cursor-pointer"
               aria-label="Toggle Theme"
             >
               {theme === "light" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
-            </button>
-            <Link
-              href="/cakes"
-              className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-white shadow-md hover:bg-primary/95 transition-all hover:scale-105"
+            </motion.button>
+            <motion.div
+              whileHover={{ y: -2 }}
+              whileTap={{ scale: 0.95 }}
             >
-              Order Now
-            </Link>
+              <Link
+                href="/cakes"
+                className="rounded-full bg-primary px-6 py-2.5 text-sm font-bold text-white shadow-md hover:bg-primary/95 transition-all cursor-pointer inline-block"
+              >
+                Order Now
+              </Link>
+            </motion.div>
           </div>
 
           {/* Mobile menu and theme buttons */}
